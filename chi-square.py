@@ -3,17 +3,21 @@ import pandas as pd
 import math
 
 '''
-2022/04/14 CCC
-讀檔, 值域, 值域出現值, 機率分配, 值域卡方值 =====> 算完了
-特徵值域你要output的時候再加總吧
+2022/04/14 CCC v2
+讀檔, 值域, 值域出現值, 機率分配, 值域卡方值, 特徵值域卡方值(這個存在feature裡面) =====> 算完了
 數字應該沒啥問題, 但我沒取小數點第幾位那個, 有點懶就直接算了
 阿計算的東西基本上都在feature的cal_chi_square那個function裡面了
-要拿的東西都print出來了, 你再看要怎處理吧hehe
+應該可以直接在feature裡面call到所有要的東西
+feature_domain跟feature_con_domain好像有點不必要分兩個(但我現在懶得改了)
+阿就除了class值域那層要例外, 後面的應該都可以直接弄一樣的東西吧我猜
 '''
 
 class domain:
-    domain_name = ''
-    domain_conclusion = {}
+    domain_name = ''  # 值域名稱
+    domain_conclusion = {} # 值域結論
+    domain_appear = 0.0 # 值域出現值
+    theo_value = {} # 理論值
+    chi_square = 0.0 # 值域卡方值
 
     def __init__(self, domain_name):
         self.reset()
@@ -22,19 +26,31 @@ class domain:
     def reset(self):
         self.domain_name = ''
         self.domain_conclusion = {}
+        self.domain_appear = 0.0
+        self.theo_value = {}
+        chi_square = 0.0
 
     def set_conclusion(self, con):
         if con not in self.domain_conclusion:
             self.domain_conclusion[con] = 1
         else:    
             self.domain_conclusion[con] += 1
+    
+    def set_appear(self, value):
+        self.domain_appear = value
+
+    def set_theo_value(self, con, value):
+        self.theo_value[con] = value
+    
+    def set_chi_square(self, value):
+        self.chi_square = value
 
 class feature:
     feature_name = '' # 特徵名稱
     feature_domain = {} # 值域出現值 {'值域名稱': 次數}
     feature_con_domain = {} # 值域出現值結果 {'good': 次數, 'no-good': 次數,...}
     prob = {} # 機率分配
-    domain_chi_square = {} # 值域卡方值
+    feature_chi_square = 0.0 # 特徵值域合計卡方值
 
     def __init__(self, feature_name, feature_domain = None, feature_con_domain = None, prob = {}):
         self.reset()
@@ -50,6 +66,7 @@ class feature:
         self.feature_con_domain = {}
         self.prob = {}
         self.domain_chi_square = {}
+        self.feature_chi_square = 0.0
     
     def cal_chi_square(self):
         # class值域
@@ -73,17 +90,22 @@ class feature:
                 domain_sum = 0.0
                 for outcome in self.feature_con_domain[key].domain_conclusion:
                     domain_sum += self.feature_con_domain[key].domain_conclusion[outcome]
-                print(key) # 值域名稱
+                print(f'{key}值域') # 值域名稱 =====> domain class
                 print(f'{key}的值域出現值為{domain_sum}')
+                self.feature_con_domain[key].set_appear(domain_sum)
                 for outcome in self.prob:
                     theo_value = domain_sum*self.prob[outcome] # 計算理論值
                     print(f'{outcome}的理論值:{theo_value}')
+                    self.feature_con_domain[key].set_theo_value(outcome, theo_value)
                     if outcome not in self.feature_con_domain[key].domain_conclusion:
                         temp_chi_square += math.pow(0 - theo_value, 2) / theo_value
                     else:    
                         temp_chi_square += math.pow(self.feature_con_domain[key].domain_conclusion[outcome] - theo_value, 2) / theo_value
                 print(f'{key}的值域卡方:{temp_chi_square}')
+                self.feature_con_domain[key].set_chi_square(temp_chi_square)
+                self.feature_chi_square += temp_chi_square
                 print('--------------------------------------')
+            print(f'特徵值域(合計卡方值):{self.feature_chi_square}')
 
 class raw_data:
     '''
