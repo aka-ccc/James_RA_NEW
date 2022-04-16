@@ -72,40 +72,40 @@ class feature:
         # class值域
         if self.feature_con_domain == None:
             data_sum = 0.0
-            print('======================================')
-            print(f'{self.feature_name}值域')
+            # print('======================================')
+            # print(f'{self.feature_name}值域')
             for key in self.feature_domain:
                 data_sum += self.feature_domain[key]
-                print(f'{key}的值域出現值為{self.feature_domain[key]}')
+                # print(f'{key}的值域出現值為{self.feature_domain[key]}')
             for key in self.feature_domain:
                 self.prob[key] = self.feature_domain[key]/data_sum
-                print(f'{key}的機率分配為{self.prob[key]}')
-            print('--------------------------------------')
+            #     print(f'{key}的機率分配為{self.prob[key]}')
+            # print('--------------------------------------')
         # 其他值域
         else:
-            print('======================================')
-            print(f'特徵{self.feature_name}')
+            # print('======================================')
+            # print(f'特徵{self.feature_name}')
             for key in self.feature_con_domain:
                 temp_chi_square = 0.0
                 domain_sum = 0.0
                 for outcome in self.feature_con_domain[key].domain_conclusion:
                     domain_sum += self.feature_con_domain[key].domain_conclusion[outcome]
-                print(f'{key}值域') # 值域名稱 =====> domain class
-                print(f'{key}的值域出現值為{domain_sum}')
+                # print(f'{key}值域') # 值域名稱 =====> domain class
+                # print(f'{key}的值域出現值為{domain_sum}')
                 self.feature_con_domain[key].set_appear(domain_sum)
                 for outcome in self.prob:
                     theo_value = domain_sum*self.prob[outcome] # 計算理論值
-                    print(f'{outcome}的理論值:{theo_value}')
+                    # print(f'{outcome}的理論值:{theo_value}')
                     self.feature_con_domain[key].set_theo_value(outcome, theo_value)
                     if outcome not in self.feature_con_domain[key].domain_conclusion:
                         temp_chi_square += math.pow(0 - theo_value, 2) / theo_value
                     else:    
                         temp_chi_square += math.pow(self.feature_con_domain[key].domain_conclusion[outcome] - theo_value, 2) / theo_value
-                print(f'{key}的值域卡方:{temp_chi_square}')
+                # print(f'{key}的值域卡方:{temp_chi_square}')
                 self.feature_con_domain[key].set_chi_square(temp_chi_square)
                 self.feature_chi_square += temp_chi_square
-                print('--------------------------------------')
-            print(f'特徵值域(合計卡方值):{self.feature_chi_square}')
+            #     print('--------------------------------------')
+            # print(f'特徵值域(合計卡方值):{self.feature_chi_square}')
 
 class raw_data:
     '''
@@ -155,7 +155,8 @@ class raw_data:
         
 
 def main():
-    data = raw_data(file_path = 'Weather-排序.csv')
+    data = raw_data(file_path = 'F:/NUK/建新RA/卡方/James_RA_NEW/Weather-排序.csv')
+    
 
 if __name__ == '__main__':
     main()
