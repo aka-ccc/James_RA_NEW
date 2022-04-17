@@ -28,7 +28,7 @@ class domain:
         self.domain_conclusion = {}
         self.domain_appear = 0.0
         self.theo_value = {}
-        chi_square = 0.0
+        self.chi_square = 0.0
 
     def set_conclusion(self, con):
         if con not in self.domain_conclusion:

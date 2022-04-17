@@ -1,6 +1,6 @@
 from chi_square_module import raw_data
 def test():
-    data = raw_data(file_path = 'F:/NUK/建新RA/卡方/James_RA_NEW/Weather-排序.csv')
+    data = raw_data(file_path = 'F:/NUK/建新RA/卡方/James_RA_NEW/10-EWI-8.csv')
     
     for feature in data.data_features.values():
         if(feature.feature_con_domain==None):
@@ -39,6 +39,5 @@ def exportChiSquareCsvFile(inputFilePath,outputFilePath):
 
 
 if __name__ == "__main__":
-    exportChiSquareCsvFile(inputFilePath='F:/NUK/建新RA/卡方/James_RA_NEW/Weather-排序.csv',outputFilePath='F:/NUK/建新RA/卡方/James_RA_NEW/Weather-排序-結果.csv')
-
-
+    # exportChiSquareCsvFile(inputFilePath='F:/NUK/建新RA/卡方/James_RA_NEW/Weather-排序.csv',outputFilePath='F:/NUK/建新RA/卡方/James_RA_NEW/Weather-排序-結果.csv')
+    test()
