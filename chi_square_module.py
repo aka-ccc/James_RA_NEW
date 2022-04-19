@@ -71,6 +71,7 @@ class feature:
     def cal_chi_square(self):
         # class值域
         if self.feature_con_domain == None:
+            self.prob = {} # 加這行就沒事了 prob沒重置到不知道為啥@@ 我明明就有給初始值
             data_sum = 0.0
             # print('======================================')
             # print(f'{self.feature_name}值域')
